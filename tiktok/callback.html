@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trimlark Poster · connecting</title>
+<style>body{font:16px/1.6 system-ui,sans-serif;max-width:560px;margin:60px auto;padding:0 16px;color:#222;background:#fff}</style>
+</head><body>
+<h1>Connecting to Trimlark…</h1>
+<p id="m">Passing TikTok's one-time code to Trimlark's posting desk.</p>
+<script>
+// TikTok redirects here after "Authorize" with ?code=&state=. The posting phone is on Trimlark's private network, so this page
+// hands the one-time code to the desk there (the code is useless without the app secret, which never leaves our computer).
+(function () {
+  var q = location.search || "";
+  if (!/[?&]code=/.test(q)) { document.getElementById("m").textContent = "No code from TikTok. Close this page and try Authorize again."; return; }
+  location.replace("http://100.112.204.73:8755/tt_code" + q);
+})();
+</script>
+</body></html>
