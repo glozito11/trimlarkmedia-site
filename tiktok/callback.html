@@ -1,17 +1,20 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Trimlark Poster · connecting</title>
-<style>body{font:16px/1.6 system-ui,sans-serif;max-width:560px;margin:60px auto;padding:0 16px;color:#222;background:#fff}</style>
-</head><body>
-<h1>Connecting to Trimlark…</h1>
-<p id="m">Passing TikTok's one-time code to Trimlark's posting desk.</p>
+<style>body{font:17px/1.5 system-ui,sans-serif;max-width:560px;margin:40px auto;padding:0 16px;color:#222;background:#fff}
+code{display:block;word-break:break-all;background:#f3f3f3;padding:12px;border-radius:8px;font-size:13px}
+button,a.b{display:block;width:100%;margin:14px 0;padding:14px;font-size:18px;border:0;border-radius:10px;background:#fe2c55;color:#fff;text-align:center;text-decoration:none}
+a.b.g{background:#555}</style></head><body>
+<h2>Trimlark Poster</h2><p id="m">Connecting your TikTok account to Trimlark's posting desk…</p>
+<div id="box" style="display:none"><p>If Trimlark didn't pick it up by itself, copy this and paste it in your Keys box as <b>TikTok callback code</b>:</p>
+<code id="c"></code><button id="cp">Copy</button><a class="b g" id="desk" href="#">Send to Trimlark's desk (works on Trimlark's network)</a></div>
 <script>
-// TikTok redirects here after "Authorize" with ?code=&state=. The posting phone is on Trimlark's private network, so this page
-// hands the one-time code to the desk there (the code is useless without the app secret, which never leaves our computer).
 (function () {
-  var q = location.search || "";
-  if (!/[?&]code=/.test(q)) { document.getElementById("m").textContent = "No code from TikTok. Close this page and try Authorize again."; return; }
-  location.replace("http://100.112.204.73:8755/tt_code" + q);
+  var q = new URLSearchParams(location.search), code = q.get("code"), st = q.get("state") || "";
+  if (!code) { document.getElementById("m").textContent = q.get("error_description") || "No code from TikTok. Close this page and try Authorize again."; return; }
+  var payload = code + "|" + st, desk = "http://100.112.204.73:8755/tt_code" + location.search;
+  document.getElementById("c").textContent = payload; document.getElementById("desk").href = desk;
+  document.getElementById("box").style.display = "block";
+  document.getElementById("m").textContent = "Authorized. One last step:";
+  document.getElementById("cp").onclick = function () { navigator.clipboard.writeText(payload).then(function () { document.getElementById("cp").textContent = "Copied ✓"; }); };
 })();
-</script>
-</body></html>
+</script></body></html>
